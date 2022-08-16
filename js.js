@@ -1,3 +1,5 @@
+
+
 var Gameboard = (function(){
     //piece array
     let gameboard = ["", "", "", "", "", "", "", "", ""];
@@ -88,36 +90,93 @@ const AI = Player("AI", "O");
 
 var Game = (function(){
 
-    //record turns
+    function winCheck(){
 
-    function playRoundOdd(turn){
+        winner = false;
 
-        console.log("round "+turn+":");
+        /*
+        if (Gameboard.gameboard[0] == "X"&&
+            Gameboard.gameboard[1] == "X"&&
+            Gameboard.gameboard[2] == "X"){
+                winner = "true";
+            } else {
+                winner = "false";
+            }
 
-        //assign X or O
+            if (winner = "true"){
+                alert("You Win!");
+
+                //delete everything
+
+                for (i = 0 ; i < 9; i++){
+
+                    let cell = document.getElementById(i);
+                    cell.textContent = gameboard[i];
+                }
+            }
+    */
+    }
+
+
+    function playFirstRound(){
+
+
+          
+        document.addEventListener(`click`, function(e) {
+
+
             
-            document.addEventListener(`click`, function(e) {
+            if (e.target.classList == "cell"){
+
 
                 //check if something is already there
+
+                if (Gameboard.gameboard[e.target.id] != "X" &&
+                Gameboard.gameboard[e.target.id] != "O"){
+
+                    //if nothing exists, write
+                    Gameboard.gameboard[e.target.id] = "X";
+                    e.target.textContent = "X";
+                }
+
+               //console.log(Gameboard.gameboard);
+            }
+        }, {once:true})
+
+        winCheck();
+    }
+
+
+    function playRoundOdd(){
+
+
+          
+            document.addEventListener(`click`, function(e) {
+
 
                 
                 if (e.target.classList == "cell"){
 
+
+                    //check if something is already there
+
                     if (Gameboard.gameboard[e.target.id] != "X" &&
                     Gameboard.gameboard[e.target.id] != "O"){
+
+                        //if nothing exists, write
                         Gameboard.gameboard[e.target.id] = "X";
                         e.target.textContent = "X";
+                    } else {
+                        playRoundOdd();
                     }
 
-                    console.log(Gameboard.gameboard);
+                    //console.log(Gameboard.gameboard);
                 }
             }, {once:true})
+            winCheck();
+            }
 
-
-    }
-
-    function playRoundEven(turn){
-        console.log("round "+turn+":");
+    function playRoundEven(){
 
         //assign X or O
             
@@ -128,7 +187,9 @@ var Game = (function(){
                     Gameboard.gameboard[e.target.id] != "O"){
                         Gameboard.gameboard[e.target.id] = "O";
                         e.target.textContent = "O";
-                    } 
+                    } else {
+                        playRoundEven();
+                    }
                 }
             }, {once:true})
 
@@ -136,41 +197,89 @@ var Game = (function(){
     }
     
 
-    //winCheck
-
-    function winCheck(){
-    }
-
-
-
-
     function render(){
-        //clear first board
-        //Gameboard.deleteTable();
-
-        //update Array
-        //writeToArray();
-
-        //play round one
-        //playRound();
 
 
-        //update board
-        //Gameboard.render();
-
-        //check for winners
-       // winCheck();
     }
 
-    return {render, playRoundEven, playRoundOdd};
+    return {render, playRoundEven, playRoundOdd, playFirstRound, winCheck};
 
 })()
 
+
+
 Gameboard.render();
-Game.playRoundOdd(1);
+Game.render();
+
+//round one
+Game.playFirstRound();
+
+
+//check winner or launch round 2
+if (Game.winCheck.winner === true){
+    alert("You Win");
+} else {
+    Gameboard.writeNewValues();
+    Game.playRoundEven();
+}
+
+//check winner or launch round 3
+if (Game.winCheck.winner  === true){
+    alert("You Win");
+} else {
+    Gameboard.writeNewValues();
+    Game.playRoundOdd();
+}
+
+//check winner or launch round 4
+if (Game.winCheck.winner  === true){
+    alert("You Win");
+} else {
+    Gameboard.writeNewValues();
+    Game.playRoundEven();
+}
+
+//check winner or launch round 5
+if (Game.winCheck.winner  === true){
+    alert("You Win");
+} else {
+    Gameboard.writeNewValues();
+    Game.playRoundOdd();
+}
+
+//check winner or launch round 6
+if (Game.winCheck.winner  === true){
+    alert("You Win");
+} else {
+    Gameboard.writeNewValues();
+    Game.playRoundEven();
+}
+
+
 Gameboard.writeNewValues();
-Game.playRoundEven(2);
+Game.playRoundOdd();
+
 Gameboard.writeNewValues();
-Game.playRoundOdd(3);
+Game.playRoundEven();
+
+Gameboard.writeNewValues();
+Game.playRoundOdd();
+
+Gameboard.writeNewValues();
+Game.playRoundOdd();
+
+Gameboard.writeNewValues();
+Game.playRoundEven();
+
+Gameboard.writeNewValues();
+Game.playRoundOdd();
+
+Gameboard.writeNewValues();
+Game.playRoundEven();
+
+Gameboard.writeNewValues();
+Game.playRoundOdd();
+
+
 
 
