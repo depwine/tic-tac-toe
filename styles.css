@@ -1,0 +1,66 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    height: 100vh;
+
+    background-color: slategray;
+
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+table{
+    display: grid;
+
+    width: 335px;
+    height: 335px;
+
+    border: 20px solid gray;
+
+    justify-content: center;
+    align-content: center;
+    
+    background-color: gray;
+}
+
+#row{
+    display: grid;
+    gap: 10px;
+
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+
+    justify-self: center;
+    justify-items: center;
+    align-content: space-around;
+}
+
+.cell{
+    display: grid;
+    justify-self: center;
+    justify-items: center;
+    align-content: space-around;
+
+    font-size: 80px;
+    color: slategray;
+
+    
+    /*
+    border: 1px solid rgb(179, 179, 179);
+    */
+
+    background-color: whitesmoke;
+
+    height: 100px;
+    width: 100px;
+
+}
+
+.cell:hover{
+    background-color: rgb(190, 224, 255);
+
+}
