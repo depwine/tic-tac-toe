@@ -90,34 +90,6 @@ const AI = Player("AI", "O");
 
 var Game = (function(){
 
-    function winCheck(){
-
-        winner = false;
-
-        /*
-        if (Gameboard.gameboard[0] == "X"&&
-            Gameboard.gameboard[1] == "X"&&
-            Gameboard.gameboard[2] == "X"){
-                winner = "true";
-            } else {
-                winner = "false";
-            }
-
-            if (winner = "true"){
-                alert("You Win!");
-
-                //delete everything
-
-                for (i = 0 ; i < 9; i++){
-
-                    let cell = document.getElementById(i);
-                    cell.textContent = gameboard[i];
-                }
-            }
-    */
-    }
-
-
     function playFirstRound(){
 
 
@@ -143,7 +115,6 @@ var Game = (function(){
             }
         }, {once:true})
 
-        winCheck();
     }
 
 
@@ -173,8 +144,8 @@ var Game = (function(){
                     //console.log(Gameboard.gameboard);
                 }
             }, {once:true})
-            winCheck();
-            }
+
+        }
 
     function playRoundEven(){
 
@@ -196,90 +167,65 @@ var Game = (function(){
 
     }
     
+    function winCheck(){
+        if (Gameboard.gameboard[0] === "X" &&
+            Gameboard.gameboard[1] === "X" &&
+            Gameboard.gameboard[2] === "X"){
+    
+                winner = true;
+                console.log("Winner!");
+    
+            } else {
+                winner = false;
+                console.log("false");
+            }
+    }
+    
+    function evenRound(){
+        Gameboard.writeNewValues();
+        Game.playRoundEven();
+        }
+        
+    function oddRound(){
+        Gameboard.writeNewValues();
+        Game.playRoundOdd();
+    }
 
-    function render(){
+    //declare round
+    round = 7;
+    winner = false;
 
+    function checkPlay(){
+
+        if (round == 1||3||5||7||9){
+            console.log("odd round");
+            oddRound();
+            round++;
+        } else {
+            console.log("even round");
+            evenRound();
+            round++;
+        }
 
     }
 
-    return {render, playRoundEven, playRoundOdd, playFirstRound, winCheck};
+
+
+    function render(){
+        
+        playFirstRound();
+    }
+
+    return {render, playRoundEven, playRoundOdd, playFirstRound, checkPlay,
+    evenRound, oddRound};
 
 })()
 
-
-
+//make board
 Gameboard.render();
+
+//play first round
 Game.render();
-
-//round one
-Game.playFirstRound();
-
-
-//check winner or launch round 2
-if (Game.winCheck.winner === true){
-    alert("You Win");
-} else {
-    Gameboard.writeNewValues();
-    Game.playRoundEven();
-}
-
-//check winner or launch round 3
-if (Game.winCheck.winner  === true){
-    alert("You Win");
-} else {
-    Gameboard.writeNewValues();
-    Game.playRoundOdd();
-}
-
-//check winner or launch round 4
-if (Game.winCheck.winner  === true){
-    alert("You Win");
-} else {
-    Gameboard.writeNewValues();
-    Game.playRoundEven();
-}
-
-//check winner or launch round 5
-if (Game.winCheck.winner  === true){
-    alert("You Win");
-} else {
-    Gameboard.writeNewValues();
-    Game.playRoundOdd();
-}
-
-//check winner or launch round 6
-if (Game.winCheck.winner  === true){
-    alert("You Win");
-} else {
-    Gameboard.writeNewValues();
-    Game.playRoundEven();
-}
-
-
-Gameboard.writeNewValues();
-Game.playRoundOdd();
-
-Gameboard.writeNewValues();
-Game.playRoundEven();
-
-Gameboard.writeNewValues();
-Game.playRoundOdd();
-
-Gameboard.writeNewValues();
-Game.playRoundOdd();
-
-Gameboard.writeNewValues();
-Game.playRoundEven();
-
-Gameboard.writeNewValues();
-Game.playRoundOdd();
-
-Gameboard.writeNewValues();
-Game.playRoundEven();
-
-Gameboard.writeNewValues();
-Game.playRoundOdd();
-
-
+Game.checkPlay();
 
 
