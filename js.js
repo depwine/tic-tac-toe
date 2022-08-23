@@ -1,75 +1,6 @@
-
-
-var Gameboard = (function(){
-    //declare empty piece array
-    let gameboard = ["", "", "", "", "", "", "", "", ""];
-
-    function clearArray(){
-        for (i = 0; i < gameboard.length; i++){
-            gameboard[i] = "";
-        }
-    }
-
-    //decalre row once
-    const row = document.getElementById(`row`);
-
-    //build gameboard
-    function createTable(){
-
-        for (i = 0; i < (gameboard.length); i++){
-
-            //create the cells
-            let cell = document.createElement("td");
-            cell.classList.add("cell");
-            cell.setAttribute('id', i);
-
-            //append
-            row.appendChild(cell);
-        }
-    }
-
-    function deleteTable(){
-
-        for (i = 0 ; i < 9; i++){
-            let cell = document.getElementById(i);
-            cell.remove();            
-        }
-
-        clearArray();
-    }
-
-    function writeNewValues(){
-
-        for (i = 0 ; i < 9; i++){
-
-            let cell = document.getElementById(i);
-            cell.textContent = gameboard[i];
-        }
-    }
-    //render
-    function render(){
-        createTable();
-    }
-
-    //return
-    return {render, gameboard, writeNewValues, deleteTable};
-
-    }
-
-)()
-
-const Player = (name, piece) => {
-    return { name , piece };
-}
-
-const Human = Player("Glib", "X");
-const AI = Player("AI", "O");
-
 var Game = (function(){
 
-    round = 1;
-    winnerX = false;
-    winnerO = false;
+
 
     function winCheck(){
             //Xs
@@ -163,12 +94,17 @@ var Game = (function(){
     }
 
     function playFirstRound(){
-          
+
+        round = 1;
+        winnerX = false;
+        winnerO = false;
+
+        console.log("first round started");  
+
+
         document.addEventListener(`click`, function(e) {  
 
             if (e.target.classList == "cell"){
-
-                //check if something is already there
 
                 if (Gameboard.gameboard[e.target.id] != "X" &&
                 Gameboard.gameboard[e.target.id] != "O"){
@@ -188,81 +124,85 @@ var Game = (function(){
 
     function playRoundOdd(){
           
-        document.addEventListener(`click`, function(e) {                
-            if (e.target.classList == "cell"){
-
-                //check if something is already there
-
-                if (Gameboard.gameboard[e.target.id] != "X" &&
-                Gameboard.gameboard[e.target.id] != "O"){
-
-                    //if nothing exists, write
-                    Gameboard.gameboard[e.target.id] = "X";
-                    e.target.textContent = "X";
-
-                    winCheck();
-                    console.log(winnerO);
-
-                    console.log(Gameboard.gameboard);
-
-                    /*
-                    if (winnerX = true){
-                        console.log("X wins!");
-                    } else if (winnerO = true){
-                        console.log("O wins!");
-                    } else {
-                        console.log("no winners yet")
-                    }
-                    */
-
-                    console.log(round);
-                    round++
-
-                } else {
-                    playRoundOdd();
-                    //console.log(round);
-                }
-            }
-        }, {once:true})
-    }
-
-    function playRoundEven(){
-
-        //assign X or O
+        document.addEventListener(`click`, function(e) {   
             
-            document.addEventListener(`click`, function(e) {
+            winCheck();
+
+            //check if the game is over
+
+            if (winnerX === true || winnerO === true){
+
+                //show correct winner
+                if (winnerX === true){
+                    console.log("X Wins");
+                    winnerO = false;
+                    winnerX = false;
+                    round = 0;
+                }
+
+            } else {
+
                 if (e.target.classList == "cell"){
 
                     if (Gameboard.gameboard[e.target.id] != "X" &&
                     Gameboard.gameboard[e.target.id] != "O"){
-                        Gameboard.gameboard[e.target.id] = "O";
-                        e.target.textContent = "O";
-
-                        //check for winner
-                        winCheck();
-                        //console.log(winnerX);
-                        console.log(winnerO);
-
-                        /*
-                        if (winnerX = true){
-                            console.log("X wins!");
-                        } else if (winnerO = true){
-                            console.log("O wins!");
-                        } else {
-                            console.log("no winners yet")
-                        }
-                        */
-
+    
+                        //if nothing exists, write
+                        Gameboard.gameboard[e.target.id] = "X";
+                        e.target.textContent = "X";
+    
                         console.log(round);
                         round++
-
+    
                     } else {
-
-                        playRoundEven();
-
+                        playRoundOdd();
                     }
                 }
-            }, {once:true})
+            }
+
+        }, {once:true})
+    }
+
+    function playRoundEven(){
+          
+        document.addEventListener(`click`, function(e) {   
+            
+            winCheck();
+
+            //check if the game is over
+
+            if (winnerX === true || winnerO === true){
+
+                //show correct winner
+                if (winnerO === true){
+                    console.log("O Wins")
+                    winnerO = false;
+                    winnerX = false;
+                    round = 0;
+                }
+
+
+            } else {
+
+                if (e.target.classList == "cell"){
+
+                    if (Gameboard.gameboard[e.target.id] != "X" &&
+                    Gameboard.gameboard[e.target.id] != "O"){
+    
+                        //if nothing exists, write
+                        Gameboard.gameboard[e.target.id] = "O";
+                        e.target.textContent = "O";
+    
+                        console.log(round);
+                        round++
+    
+                    } else {
+                        playRoundEven();
+                    }
+                }
+            }
+
+        }, {once:true})
     }
     
     function gameLoop(){
@@ -305,28 +245,116 @@ var Game = (function(){
         
     }
     
-
-    //declare round
-
-
-
-
     function render(){
         
         gameLoop();
 
     }
 
-    return {render, playRoundEven, playRoundOdd, playFirstRound,
-        gameLoop, round};
+    return {render};
 
 })()
 
-//make board
-Gameboard.render();
+var Gameboard = (function(){
+    //declare empty piece array
+    let gameboard = ["", "", "", "", "", "", "", "", ""];
 
-//play first round
-Game.render();
+    function clearArray(){
+        for (i = 0; i < gameboard.length; i++){
+            gameboard[i] = "";
+        }
+    }
+
+    //declare row once
+    const row = document.getElementById(`row`);
+
+    //build gameboard
+    function createTable(){
+
+        for (i = 0; i < (gameboard.length); i++){
+
+            //create the cells
+            let cell = document.createElement("td");
+            cell.classList.add("cell");
+            cell.setAttribute('id', i);
+
+            //append
+            row.appendChild(cell);
+        }
+    }
+
+    function deleteTable(){
+
+        for (i = 0 ; i < 9; i++){
+            let cell = document.getElementById(i);
+            cell.remove();            
+        }
+
+        clearArray();
+    }
+
+    function writeNewValues(){
+
+        for (i = 0 ; i < 9; i++){
+
+            let cell = document.getElementById(i);
+            cell.textContent = gameboard[i];
+        }
+    }
+
+        function startGame(){
+            createTable();
+            Game.render();
+        }
+
+        function clearBoard(){
+            deleteTable();
+        }
+
+        function resetGame(){
+            console.log("button pressed");
+
+        }
+
+        var startButton = document.getElementById("startButton");
+        startButton.addEventListener(`click`, function(){
+            startGame();
+        }, {once:true});
+
+
+        var resetButton = document.getElementById("resetButton");
+        resetButton.addEventListener(`click`, function(){
+            resetGame();
+        });
+
+
+
+    //render
+    function render(){
+        createTable();
+    }
+
+    //return
+    return {render, gameboard, writeNewValues, deleteTable};
+
+    }
+
+)()
+
+const Player = (name, piece) => {
+    return { name , piece };
+}
+
+const Human = Player("Glib", "X");
+const AI = Player("AI", "O");
+
+
+
+//make board
+//Gameboard.render();
+
+//play game until winner
+//Game.render();
 
 
 

@@ -27,6 +27,17 @@ table{
     background-color: gray;
 }
 
+#reset{
+    display: grid;
+
+    border: 20px solid gray;
+
+    justify-content: center;
+    align-self: start;
+    
+    background-color: gray;
+}
+
 #row{
     display: grid;
     gap: 10px;
