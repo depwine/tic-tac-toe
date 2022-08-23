@@ -1,6 +1,64 @@
+
+
+var Gameboard = (function(){
+    //declare empty piece array
+    let gameboard = ["", "", "", "", "", "", "", "", ""];
+
+    function clearArray(){
+        gameboard = ["", "", "", "", "", "", "", "", ""];
+    }
+
+    //declare row once
+    const row = document.getElementById(`row`);
+
+    //build gameboard
+    function createTable(){
+
+        for (i = 0; i < (gameboard.length); i++){
+
+            //create the cells
+            let cell = document.createElement("td");
+            cell.classList.add("cell");
+            cell.setAttribute('id', i);
+
+            //append
+            row.appendChild(cell);
+        }
+    }
+
+    function writeNewValues(){
+
+        for (i = 0 ; i < 9; i++){
+
+            let cell = document.getElementById(i);
+            cell.textContent = gameboard[i];
+        }
+    }
+
+    function deleteTable(){
+
+        clearArray();
+        console.log(gameboard);
+        writeNewValues();
+    }
+
+    //render
+    function render(){
+        createTable();
+    }
+
+    //return
+    return {render, gameboard, writeNewValues, deleteTable};
+
+    }
+)()
+
 var Game = (function(){
 
-
+    let round = 1;
+    let winnerX = false;
+    let winnerO = false;
+    
 
     function winCheck(){
             //Xs
@@ -93,17 +151,11 @@ var Game = (function(){
             }
     }
 
+
+
     function playFirstRound(){
 
-        round = 1;
-        winnerX = false;
-        winnerO = false;
-
-        console.log("first round started");  
-
-
-        document.addEventListener(`click`, function(e) {  
-
+        function firstRound(e){
             if (e.target.classList == "cell"){
 
                 if (Gameboard.gameboard[e.target.id] != "X" &&
@@ -118,14 +170,18 @@ var Game = (function(){
 
                 }
             }
+        }
+        
+        document.addEventListener(`click`, function(e) {  
+            
+            firstRound(e);
+
         }, {once:true})
     }
 
-
     function playRoundOdd(){
           
-        document.addEventListener(`click`, function(e) {   
-            
+        function oddRound(e){
             winCheck();
 
             //check if the game is over
@@ -135,9 +191,24 @@ var Game = (function(){
                 //show correct winner
                 if (winnerX === true){
                     console.log("X Wins");
+                    console.log(Gameboard.gameboard);
+
+                    document.removeEventListener(`click`, function(e) {   
+                        firstRound(e);                        
+                    }, {once:true})
+
+                    document.removeEventListener(`click`, function(e) {   
+                        oddRound(e);                        
+                    }, {once:true})
+
+                    document.removeEventListener(`click`, function(e) {   
+                        evenRound(e);                        
+                    }, {once:true})
+
                     winnerO = false;
                     winnerX = false;
-                    round = 0;
+                    round = 1;
+                    
                 }
 
             } else {
@@ -160,13 +231,19 @@ var Game = (function(){
                 }
             }
 
+        }
+
+        document.addEventListener(`click`, function(e) {   
+            
+            oddRound(e);
+            
         }, {once:true})
     }
 
     function playRoundEven(){
-          
-        document.addEventListener(`click`, function(e) {   
-            
+
+        function evenRound(e){
+                        
             winCheck();
 
             //check if the game is over
@@ -176,9 +253,12 @@ var Game = (function(){
                 //show correct winner
                 if (winnerO === true){
                     console.log("O Wins")
+
+                    document.removeEventListener(`click`, function(e){});
+
                     winnerO = false;
                     winnerX = false;
-                    round = 0;
+                    round = 1;
                 }
 
 
@@ -202,6 +282,10 @@ var Game = (function(){
                 }
             }
 
+        }
+          
+        document.addEventListener(`click`, function(e) {   
+            evenRound(e);
         }, {once:true})
     }
     
@@ -246,100 +330,63 @@ var Game = (function(){
     }
     
     function render(){
-        
+
+        Gameboard.gameboard = ["", "", "", "", "", "", "", "", ""];
+
+        for (i = 0 ; i < 9; i++){
+    
+            let cell = document.getElementById(i);
+            cell.textContent = Gameboard.gameboard[i];
+        }
+
+        console.log(Gameboard.gameboard);
+
+        round = 1;
+        winnerX = false;
+        winnerO = false;
         gameLoop();
 
     }
 
-    return {render};
+    return {render, winnerX, winnerO, round};
 
 })()
 
-var Gameboard = (function(){
-    //declare empty piece array
-    let gameboard = ["", "", "", "", "", "", "", "", ""];
 
-    function clearArray(){
-        for (i = 0; i < gameboard.length; i++){
-            gameboard[i] = "";
-        }
+var GameTest = (function(){
+
+    function playGame(){
+         Gameboard.gameboard = ["X", "X", "X", "", "", "", "", "", ""];
+
+         console.log(Gameboard.gameboard);
+        
+         for(i = 0; i < 9 ; i++){ 
+             let cell = document.getElementById(i);
+             cell.textContent = Gameboard.gameboard[i]; 
+         }
+
     }
 
-    //declare row once
-    const row = document.getElementById(`row`);
+    document.addEventListener(`click`, function (){
+        playGame();
+    }, {once:true});
 
-    //build gameboard
-    function createTable(){
 
-        for (i = 0; i < (gameboard.length); i++){
 
-            //create the cells
-            let cell = document.createElement("td");
-            cell.classList.add("cell");
-            cell.setAttribute('id', i);
 
-            //append
-            row.appendChild(cell);
-        }
+
+
+    function one(){
+        document.removeEventListener(`click`, function(){playGame()}, {once:true})
     }
 
-    function deleteTable(){
-
-        for (i = 0 ; i < 9; i++){
-            let cell = document.getElementById(i);
-            cell.remove();            
-        }
-
-        clearArray();
-    }
-
-    function writeNewValues(){
-
-        for (i = 0 ; i < 9; i++){
-
-            let cell = document.getElementById(i);
-            cell.textContent = gameboard[i];
-        }
-    }
-
-        function startGame(){
-            createTable();
-            Game.render();
-        }
-
-        function clearBoard(){
-            deleteTable();
-        }
-
-        function resetGame(){
-            console.log("button pressed");
-
-        }
-
-        var startButton = document.getElementById("startButton");
-        startButton.addEventListener(`click`, function(){
-            startGame();
-        }, {once:true});
-
-
-        var resetButton = document.getElementById("resetButton");
-        resetButton.addEventListener(`click`, function(){
-            resetGame();
-        });
-
-
-
-    //render
     function render(){
-        createTable();
-    }
+        one};
+       
+    return {render};    
 
-    //return
-    return {render, gameboard, writeNewValues, deleteTable};
+})()
 
-    }
-
-)()
 
 const Player = (name, piece) => {
     return { name , piece };
@@ -348,13 +395,32 @@ const Player = (name, piece) => {
 const Human = Player("Glib", "X");
 const AI = Player("AI", "O");
 
-
-
 //make board
-//Gameboard.render();
+Gameboard.render();
+
+
 
 //play game until winner
 //Game.render();
+
+const reset = document.getElementById("resetButton")
+GameTest.render();
+    
+    const start = document.getElementById("startButton")
+    
+    start.addEventListener(`click`, (e) => {
+        Game.render();
+    })
+    
+
+
+
+
+
+
+
+
+
 
 
 
