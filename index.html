@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="js.js" defer></script>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div id="gameboard">
-            <table class = "table">
-                <tbody>
-                    <tr id = "row">
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="reset">
-            <button id="resetButton"><p class="resetText">Reset</p></button>
-            <button id="startButton"><p class="startText">Start</p></button>
-            
-            </div>
-    </div>
+  <div id ="container">
+      <div id ="0" class = "cell 1" ></div>
+      <div id ="1" class = "cell 2" ></div>
+      <div id ="2" class = "cell 3" ></div>
+      <div id ="3" class = "cell 4" ></div>
+      <div id ="4" class = "cell 5" ></div>
+      <div id ="5" class = "cell 6" ></div>
+      <div id ="6" class = "cell 7" ></div>
+      <div id ="7" class = "cell 8" ></div>
+      <div id ="8" class = "cell 9" ></div>
+  </div>
+  <div class = "buttonCont">
+    <div><button class="reset"><p>Next Round</p></button></div>
+    <div><button class="newGame"><p>Start a New Game</p></button></div>
+  </div>
+
+
+  <div><p class="player"></p></div>
+  <div><p class="round"></p></div>
+  <div><p class="playerScore"></p></div>
+  <div><p class="aiScore"></p></div>
+
+  
+
 </body>
+
+<script src="javascript.js"></script>
+
 </html>

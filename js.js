@@ -1,428 +1,339 @@
-
-
-var Gameboard = (function(){
-    //declare empty piece array
-    let gameboard = ["", "", "", "", "", "", "", "", ""];
-
-    function clearArray(){
-        gameboard = ["", "", "", "", "", "", "", "", ""];
-    }
-
-    //declare row once
-    const row = document.getElementById(`row`);
-
-    //build gameboard
-    function createTable(){
-
-        for (i = 0; i < (gameboard.length); i++){
-
-            //create the cells
-            let cell = document.createElement("td");
-            cell.classList.add("cell");
-            cell.setAttribute('id', i);
-
-            //append
-            row.appendChild(cell);
-        }
-    }
-
-    function writeNewValues(){
-
-        for (i = 0 ; i < 9; i++){
-
-            let cell = document.getElementById(i);
-            cell.textContent = gameboard[i];
-        }
-    }
-
-    function deleteTable(){
-
-        clearArray();
-        console.log(gameboard);
-        writeNewValues();
-    }
-
-    //render
-    function render(){
-        createTable();
-    }
-
-    //return
-    return {render, gameboard, writeNewValues, deleteTable};
-
-    }
-)()
-
 var Game = (function(){
 
-    let round = 1;
-    let winnerX = false;
-    let winnerO = false;
-    
+    round = 0;
+    playerScore = 0;
+    aiScore = 0;
+    winnerX = false;
+    winnerO = false;
+    player = "Player"
 
-    function winCheck(){
-            //Xs
-        if (    Gameboard.gameboard[0] == "X"&&
-                Gameboard.gameboard[1] == "X"&&
-                Gameboard.gameboard[2] == "X"){
-                    winnerX = true;
+    //declare player and round divs
+    var playerDisplay = document.getElementsByClassName("player")[0];
+    var roundDisplay = document.getElementsByClassName("round")[0];
 
-            } else if (
-                Gameboard.gameboard[3] == "X"&&
-                Gameboard.gameboard[4] == "X"&&
-                Gameboard.gameboard[5] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[6] == "X"&&
-                Gameboard.gameboard[7] == "X"&&
-                Gameboard.gameboard[8] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[0] == "X"&&
-                Gameboard.gameboard[3] == "X"&&
-                Gameboard.gameboard[6] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[1] == "X"&&
-                Gameboard.gameboard[4] == "X"&&
-                Gameboard.gameboard[7] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[2] == "X"&&
-                Gameboard.gameboard[5] == "X"&&
-                Gameboard.gameboard[8] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[0] == "X"&&
-                Gameboard.gameboard[4] == "X"&&
-                Gameboard.gameboard[8] == "X"){
-                    winnerX = true; 
-            } else if (
-                Gameboard.gameboard[2] == "X"&&
-                Gameboard.gameboard[4] == "X"&&
-                Gameboard.gameboard[6] == "X"){    
-                    winnerX = true;
-            } 
-            //Os
-            else if (
-            Gameboard.gameboard[0] == "O"&&
-            Gameboard.gameboard[1] == "O"&&
-            Gameboard.gameboard[2] == "O"){
-                winnerO = true;
+    playerDisplay.textContent = "Next Player: "+player;
+    roundDisplay.textContent = "Turn: "+round;
 
-            } else if (
-            Gameboard.gameboard[3] == "O"&&
-            Gameboard.gameboard[4] == "O"&&
-            Gameboard.gameboard[5] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[6] == "O"&&
-            Gameboard.gameboard[7] == "O"&&
-            Gameboard.gameboard[8] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[0] == "O"&&
-            Gameboard.gameboard[3] == "O"&&
-            Gameboard.gameboard[6] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[1] == "O"&&
-            Gameboard.gameboard[4] == "O"&&
-            Gameboard.gameboard[7] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[2] == "O"&&
-            Gameboard.gameboard[5] == "O"&&
-            Gameboard.gameboard[8] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[0] == "O"&&
-            Gameboard.gameboard[4] == "O"&&
-            Gameboard.gameboard[8] == "O"){
-                winnerO = true; 
-            } else if (
-            Gameboard.gameboard[2] == "O"&&
-            Gameboard.gameboard[4] == "O"&&
-            Gameboard.gameboard[6] == "O"){    
-                winnerO = true;
-            } else {
-                winnerX = false;
-                winnerO = false;
-            }
-    }
+    //declare scores 
+    var playerScoreDisplay = document.getElementsByClassName("playerScore")[0];
+    var aiScoreDisplay = document.getElementsByClassName("aiScore")[0];
 
+    playerScoreDisplay.textContent = "Player Score: " + playerScore;
+    aiScoreDisplay.textContent = "AI Score: " + aiScore;
 
+    gameboard = ["", "", "", "", "", "", "", "", ""];
 
-    function playFirstRound(){
+    //declare all cells
+    var cell1 = document.getElementsByClassName("1")[0];
+    var cell2 = document.getElementsByClassName("2")[0];
+    var cell3 = document.getElementsByClassName("3")[0];
+    var cell4 = document.getElementsByClassName("4")[0];
+    var cell5 = document.getElementsByClassName("5")[0];
+    var cell6 = document.getElementsByClassName("6")[0];
+    var cell7 = document.getElementsByClassName("7")[0];
+    var cell8 = document.getElementsByClassName("8")[0];
+    var cell9 = document.getElementsByClassName("9")[0];
 
-        function firstRound(e){
-            if (e.target.classList == "cell"){
+    //add event listeners to each cell
+    cell1.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell2.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell3.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell4.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell5.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell6.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell7.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell8.addEventListener("click", function(e){addLetter(e)}, {once:true});
+    cell9.addEventListener("click", function(e){addLetter(e)}, {once:true});
 
-                if (Gameboard.gameboard[e.target.id] != "X" &&
-                Gameboard.gameboard[e.target.id] != "O"){
+    function aiPlay(){
 
-                    //if nothing exists, write
-                    Gameboard.gameboard[e.target.id] = "X";
-                    e.target.textContent = "X";
-
-                    console.log(round);
-                    round++
-
-                }
-            }
+        //create random int 0-8
+        function getRandomInt(){
+            return Math.floor(Math.random() * 9);
         }
-        
-        document.addEventListener(`click`, function(e) {  
-            
-            firstRound(e);
 
-        }, {once:true})
+        //assign
+        var aiSelection =  getRandomInt();
+        console.log("***ROUND*****: "+round);
+        console.log(aiSelection);
+
+        //do not run on round 9
+        if (round < 5){
+      
+        //check if exists
+        if (gameboard[aiSelection] === ""){
+            //map it to board
+            gameboard[aiSelection] = "O";
+            console.log(gameboard);
+
+            //map to array
+            var str = "cell"+ (aiSelection+1)+".textContent = 'O';";
+            //test
+            //console.log(str);
+            eval (str);
+
+
+        } else {
+            //re-run
+            aiPlay();
+        }
+        } else {
+            playerDisplay.textContent = "Tie Game, play again!";
+            roundDisplay.textContent = "";
+        }
+
+
     }
 
-    function playRoundOdd(){
-          
-        function oddRound(e){
+    function addLetter(e){
+
+        //check for win - if it's over, dont start gameloop
+        winCheck();
+
+        if (winnerX === false && winnerO === false){
+                
+    
+        //
+        //make sure it's empty
+        if (gameboard[e.target.id] === "" ){
+        
+            //if empty, run the game
+            //X turn
+            player = "AI";
+            playerDisplay.textContent = "Next Player: "+player;
+
+            gameboard[e.target.id] = "X";
+            e.target.textContent = "X";
+            
+
+
+            //check for win after X's turn
             winCheck();
 
-            //check if the game is over
-
-            if (winnerX === true || winnerO === true){
-
-                //show correct winner
-                if (winnerX === true){
-                    console.log("X Wins");
-                    console.log(Gameboard.gameboard);
-
-                    document.removeEventListener(`click`, function(e) {   
-                        firstRound(e);                        
-                    }, {once:true})
-
-                    document.removeEventListener(`click`, function(e) {   
-                        oddRound(e);                        
-                    }, {once:true})
-
-                    document.removeEventListener(`click`, function(e) {   
-                        evenRound(e);                        
-                    }, {once:true})
-
-                    winnerO = false;
-                    winnerX = false;
-                    round = 1;
-                    
-                }
+            if (winnerX === true){
+                console.log("X Wins!");
+                round = "You Win!";
+                playerDisplay.textContent = "Play Again :)";
+                roundDisplay.textContent = "You Win!";
+                playerScore++;
+                playerScoreDisplay.textContent = "Player Score: " + playerScore;
 
             } else {
-
-                if (e.target.classList == "cell"){
-
-                    if (Gameboard.gameboard[e.target.id] != "X" &&
-                    Gameboard.gameboard[e.target.id] != "O"){
-    
-                        //if nothing exists, write
-                        Gameboard.gameboard[e.target.id] = "X";
-                        e.target.textContent = "X";
-    
-                        console.log(round);
-                        round++
-    
-                    } else {
-                        playRoundOdd();
-                    }
-                }
+            //
+            //console.log(gameboard);
+            round++;
+            console.log("turn: "+round);
+            roundDisplay.textContent = "Turn: "+round;
             }
 
-        }
+            // O turn
+            player = "Player";
+            playerDisplay.textContent = "Next Player: "+player;
 
-        document.addEventListener(`click`, function(e) {   
-            
-            oddRound(e);
-            
-        }, {once:true})
-    }
+            if (round < 9){
 
-    function playRoundEven(){
+                aiPlay();
 
-        function evenRound(e){
-                        
-            winCheck();
+                /*_MANUAL CLICKING LOGIC
+                
+                //add an O to the board and write that value to the back array
+                gameboard[e.target.id] = "O";
+                e.target.textContent = "O";
+                */
+    
+                //check for win on O's turn
+                winCheck();
+    
+                 if (winnerO === true){
+                    console.log("O Wins!");
+                    round = "AI Wins!";
+                    playerDisplay.textContent = "Play Again :)";
+                    roundDisplay.textContent = "AI Wins!";
+                    aiScore++;
+                    aiScoreDisplay.textContent = "AI Score: " + aiScore;
+    
+                } else {
+                //
+                //console.log(gameboard);
+                //round++;
+                roundDisplay.textContent = "Turn: "+round;
+                }     
 
-            //check if the game is over
-
-            if (winnerX === true || winnerO === true){
-
-                //show correct winner
-                if (winnerO === true){
-                    console.log("O Wins")
-
-                    document.removeEventListener(`click`, function(e){});
-
-                    winnerO = false;
-                    winnerX = false;
-                    round = 1;
-                }
-
-
+            } else if (winnerO === false && winnerX === false) {
+                //if tie game
+                roundDisplay.textContent = "Tie Game";
+                playerDisplay.textContent = "Play Again :)";
+                console.log("Turn 9")       
+            } else if (winnerO === true){
+                //throw error for testing
+                console.log('O wins')
+            } else if (winnerX === true){
+                //throw error for testing
+                console.log("x wins");
             } else {
-
-                if (e.target.classList == "cell"){
-
-                    if (Gameboard.gameboard[e.target.id] != "X" &&
-                    Gameboard.gameboard[e.target.id] != "O"){
-    
-                        //if nothing exists, write
-                        Gameboard.gameboard[e.target.id] = "O";
-                        e.target.textContent = "O";
-    
-                        console.log(round);
-                        round++
-    
-                    } else {
-                        playRoundEven();
-                    }
-                }
+                //for testing
+                console.log("what?!")
             }
-
+    
+            } else {
+                
+            }
         }
-          
-        document.addEventListener(`click`, function(e) {   
-            evenRound(e);
-        }, {once:true})
-    }
-    
-    function gameLoop(){
-    
-        //1
-        playFirstRound();
-        Gameboard.writeNewValues();
-
-        //2
-        playRoundEven();
-        Gameboard.writeNewValues();
-
-        //3
-        playRoundOdd();
-        Gameboard.writeNewValues();
-
-        //4
-        playRoundEven();
-        Gameboard.writeNewValues();
-
-        //5
-        playRoundOdd();
-        Gameboard.writeNewValues();
-
-        //6
-        playRoundEven();
-        Gameboard.writeNewValues();
-
-        //7
-        playRoundOdd();
-        Gameboard.writeNewValues();
-
-        //8
-        playRoundEven();
-        Gameboard.writeNewValues();
-
-        //9
-        playRoundOdd();
-        Gameboard.writeNewValues();   
-        
-    }
-    
-    function render(){
-
-        Gameboard.gameboard = ["", "", "", "", "", "", "", "", ""];
-
-        for (i = 0 ; i < 9; i++){
-    
-            let cell = document.getElementById(i);
-            cell.textContent = Gameboard.gameboard[i];
-        }
-
-        console.log(Gameboard.gameboard);
-
-        round = 1;
-        winnerX = false;
-        winnerO = false;
-        gameLoop();
-
-    }
-
-    return {render, winnerX, winnerO, round};
-
-})()
-
-
-var GameTest = (function(){
-
-    function playGame(){
-         Gameboard.gameboard = ["X", "X", "X", "", "", "", "", "", ""];
-
-         console.log(Gameboard.gameboard);
-        
-         for(i = 0; i < 9 ; i++){ 
-             let cell = document.getElementById(i);
-             cell.textContent = Gameboard.gameboard[i]; 
-         }
-
-    }
-
-    document.addEventListener(`click`, function (){
-        playGame();
-    }, {once:true});
-
-
-
-
-
-
-    function one(){
-        document.removeEventListener(`click`, function(){playGame()}, {once:true})
-    }
-
-    function render(){
-        one};
-       
-    return {render};    
-
-})()
-
-
-const Player = (name, piece) => {
-    return { name , piece };
 }
 
-const Human = Player("Glib", "X");
-const AI = Player("AI", "O");
-
-//make board
-Gameboard.render();
 
 
 
-//play game until winner
-//Game.render();
+    var resetButton = document.getElementsByClassName("reset")[0];
+    resetButton.addEventListener("click", function(){reset()})
 
-const reset = document.getElementById("resetButton")
-GameTest.render();
-    
-    const start = document.getElementById("startButton")
-    
-    start.addEventListener(`click`, (e) => {
-        Game.render();
-    })
-    
-
-
-
-
-
-
-
-
+    function reset(){
+        for (i = 1; i < 10 ; i++){
+            var str = "cell"+ i+".textContent = '';";
+            eval (str);
+        }
+        //remove existing event listeners to reset once:true
+        cell1.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell2.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell3.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell4.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell5.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell6.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell7.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell8.removeEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell9.removeEventListener("click", function(e){addLetter(e)}, {once:true});
 
 
+        //re-add so that once:true is refreshed
+        cell1.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell2.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell3.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell4.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell5.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell6.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell7.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell8.addEventListener("click", function(e){addLetter(e)}, {once:true});
+        cell9.addEventListener("click", function(e){addLetter(e)}, {once:true});
 
+        //reset round
+        gameboard = ["", "", "", "", "", "", "", "", ""];
 
+        winnerX = false;
+        winnerO = false;
+        round = 0;
+        player = "Player";
+        playerDisplay.textContent = "Next Player: "+player;
+        roundDisplay.textContent = "Turn: "+round;
+    }
 
+    var newGameButton = document.getElementsByClassName("newGame")[0];
+    newGameButton.addEventListener("click", function(){newGame()})
+
+    function newGame(){
+        reset();
+        gameboard = ["", "", "", "", "", "", "", "", ""];
+
+        playerScore = 0;
+        aiScore = 0;
+        player = "Player"
+
+        playerScoreDisplay.textContent = "Player Score: " + playerScore;
+        aiScoreDisplay.textContent = "AI Score: " + aiScore;
+
+    }
+
+    function winCheck(){
+        //Xs
+    if (    gameboard[0] == "X"&&
+            gameboard[1] == "X"&&
+            gameboard[2] == "X"){
+                winnerX = true;
+
+        } else if (
+            gameboard[3] == "X"&&
+            gameboard[4] == "X"&&
+            gameboard[5] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[6] == "X"&&
+            gameboard[7] == "X"&&
+            gameboard[8] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[0] == "X"&&
+            gameboard[3] == "X"&&
+            gameboard[6] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[1] == "X"&&
+            gameboard[4] == "X"&&
+            gameboard[7] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[2] == "X"&&
+            gameboard[5] == "X"&&
+            gameboard[8] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[0] == "X"&&
+            gameboard[4] == "X"&&
+            gameboard[8] == "X"){
+                winnerX = true; 
+        } else if (
+            gameboard[2] == "X"&&
+            gameboard[4] == "X"&&
+            gameboard[6] == "X"){    
+                winnerX = true;
+        } 
+        //Os
+        else if (
+        gameboard[0] == "O"&&
+        gameboard[1] == "O"&&
+        gameboard[2] == "O"){
+            winnerO = true;
+
+        } else if (
+        gameboard[3] == "O"&&
+        gameboard[4] == "O"&&
+        gameboard[5] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[6] == "O"&&
+        gameboard[7] == "O"&&
+        gameboard[8] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[0] == "O"&&
+        gameboard[3] == "O"&&
+        gameboard[6] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[1] == "O"&&
+        gameboard[4] == "O"&&
+        gameboard[7] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[2] == "O"&&
+        gameboard[5] == "O"&&
+        gameboard[8] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[0] == "O"&&
+        gameboard[4] == "O"&&
+        gameboard[8] == "O"){
+            winnerO = true; 
+        } else if (
+        gameboard[2] == "O"&&
+        gameboard[4] == "O"&&
+        gameboard[6] == "O"){    
+            winnerO = true;
+        } else {
+            winnerX = false;
+            winnerO = false;
+        }
+}
+
+    return {};
+
+})()
 
