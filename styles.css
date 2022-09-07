@@ -1,6 +1,7 @@
 body{
     display:grid;
     justify-content: center;
+    background: black;
 }
 
 #container{
@@ -11,7 +12,9 @@ body{
     width: 300px;
     height: 300px;
 
-    background-color: slategray;
+    margin: 10px 0 0 0;
+
+    background-color: rgb(54, 0, 0);
 
     display: grid;
     grid-template-columns: repeat(3, 100px);
@@ -20,11 +23,14 @@ body{
     justify-items: center;
     align-items: center;
 
+    box-shadow: 0px 0px 100px 1px rgb(150, 0, 0);
+
 }
 
 p{
     font-family: 'Times New Roman', Times, serif;
     margin: 0;
+    color: white;
 }
 
 
@@ -38,6 +44,8 @@ p{
 
     width: 300px;
 
+    margin: 20px 0 0 0;
+
 }
 
 .reset, .newGame{
@@ -48,14 +56,27 @@ p{
     align-content: center;
 
     border-radius: 5px;
-    border: 1px solid slategray;
+    background-color: rgb(110, 0, 0);
+    border: 1px solid rgb(110, 0, 0);
 
-    font-size: 15px;
+
+}
+
+.buttonText{
+    color: rgb(255, 255, 255);
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.reset:hover, .newGame:hover{
+    background-color: rgb(255, 0, 0);
+    cursor: pointer;
 }
 
 .cell{
     display: grid;
-    background-color: rgb(170, 180, 190);
+    background-color: rgb(143, 0, 0);
     width: 90px;
     height: 90px;
 
@@ -65,26 +86,55 @@ p{
 
     font-size: 80px;
     color: white;
+
+    box-shadow: rgb(255, 0, 0);
 }
 
 .cell:hover{
-    background-color: rgb(216, 223, 231);
+    background-color: rgb(255, 0, 0);
+}
+
+.player{
+    display:grid;
+    font-size: 30px;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+    color: rgb(255, 0, 0);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bolder;
+}
+
+.scores{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+
+    font-size: 17px;
+}
+
+.playerScore, .aiScore{
+    color: rgb(255, 255, 255);
 
 }
 
+.playerScore{
+    display: grid;
+    justify-self: start;
 
+    padding: 0 0 0 10px;
+}
 
+.aiScore{
+    display: grid;
+    justify-items: end;
 
-.player{
-
+    padding: 0 10px 0 0;
 }
 
 .round{
-    
-}
-.playerScore{
+    display: grid;
+    justify-content: center;
+    padding: 10px 0 0 0;
+    font-size: 25px;
 
-}
-.aiScore{
-    
+    color: red;
 }

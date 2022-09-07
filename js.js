@@ -1,3 +1,14 @@
+/*var Player = (function(){
+
+    function playerName {
+
+    }
+
+    return {playerName};
+
+})()
+*/
+
 var Game = (function(){
 
     round = 0;
@@ -5,21 +16,21 @@ var Game = (function(){
     aiScore = 0;
     winnerX = false;
     winnerO = false;
-    player = "Player"
+    player = "Human"
 
     //declare player and round divs
     var playerDisplay = document.getElementsByClassName("player")[0];
     var roundDisplay = document.getElementsByClassName("round")[0];
 
-    playerDisplay.textContent = "Next Player: "+player;
-    roundDisplay.textContent = "Turn: "+round;
+    playerDisplay.textContent = "TIC-TAC-TOE";
+    roundDisplay.textContent = "TURN: "+round;
 
     //declare scores 
     var playerScoreDisplay = document.getElementsByClassName("playerScore")[0];
     var aiScoreDisplay = document.getElementsByClassName("aiScore")[0];
 
-    playerScoreDisplay.textContent = "Player Score: " + playerScore;
-    aiScoreDisplay.textContent = "AI Score: " + aiScore;
+    playerScoreDisplay.textContent = "PLAYER SCORE: " + playerScore;
+    aiScoreDisplay.textContent = "AI SCORE: " + aiScore;
 
     gameboard = ["", "", "", "", "", "", "", "", ""];
 
@@ -78,7 +89,7 @@ var Game = (function(){
             aiPlay();
         }
         } else {
-            playerDisplay.textContent = "Tie Game, play again!";
+            playerDisplay.textContent = "TIE, PLAY AGAIN!";
             roundDisplay.textContent = "";
         }
 
@@ -112,23 +123,23 @@ var Game = (function(){
 
             if (winnerX === true){
                 console.log("X Wins!");
-                round = "You Win!";
-                playerDisplay.textContent = "Play Again :)";
-                roundDisplay.textContent = "You Win!";
+                round = "YOU WIN!";
+                playerDisplay.textContent = "PLAY AGAIN :)";
+                roundDisplay.textContent = "YOU WIN!";
                 playerScore++;
-                playerScoreDisplay.textContent = "Player Score: " + playerScore;
+                playerScoreDisplay.textContent = "PLAYER SCORE: " + playerScore;
 
             } else {
             //
             //console.log(gameboard);
             round++;
             console.log("turn: "+round);
-            roundDisplay.textContent = "Turn: "+round;
+            roundDisplay.textContent = "TURN: "+round;
             }
 
             // O turn
             player = "Player";
-            playerDisplay.textContent = "Next Player: "+player;
+            playerDisplay.textContent = "TIC-TAC-TOE";
 
             if (round < 9){
 
@@ -146,23 +157,23 @@ var Game = (function(){
     
                  if (winnerO === true){
                     console.log("O Wins!");
-                    round = "AI Wins!";
-                    playerDisplay.textContent = "Play Again :)";
-                    roundDisplay.textContent = "AI Wins!";
+                    round = "AI WINS!";
+                    playerDisplay.textContent = "PLAY AGAIN :)";
+                    roundDisplay.textContent = "AI WINS!";
                     aiScore++;
-                    aiScoreDisplay.textContent = "AI Score: " + aiScore;
+                    aiScoreDisplay.textContent = "AI SCORE: " + aiScore;
     
                 } else {
                 //
                 //console.log(gameboard);
                 //round++;
-                roundDisplay.textContent = "Turn: "+round;
+                roundDisplay.textContent = "TURN: "+round;
                 }     
 
             } else if (winnerO === false && winnerX === false) {
                 //if tie game
                 roundDisplay.textContent = "Tie Game";
-                playerDisplay.textContent = "Play Again :)";
+                playerDisplay.textContent = "PLAY AGAIN :)";
                 console.log("Turn 9")       
             } else if (winnerO === true){
                 //throw error for testing
@@ -222,8 +233,8 @@ var Game = (function(){
         winnerO = false;
         round = 0;
         player = "Player";
-        playerDisplay.textContent = "Next Player: "+player;
-        roundDisplay.textContent = "Turn: "+round;
+        playerDisplay.textContent = "NEXT ROUND!";
+        roundDisplay.textContent = "TURN: "+round;
     }
 
     var newGameButton = document.getElementsByClassName("newGame")[0];
@@ -231,14 +242,15 @@ var Game = (function(){
 
     function newGame(){
         reset();
+        playerDisplay.textContent = "NEW GAME!";
         gameboard = ["", "", "", "", "", "", "", "", ""];
 
         playerScore = 0;
         aiScore = 0;
         player = "Player"
 
-        playerScoreDisplay.textContent = "Player Score: " + playerScore;
-        aiScoreDisplay.textContent = "AI Score: " + aiScore;
+        playerScoreDisplay.textContent = "PLAYER SCORE: " + playerScore;
+        aiScoreDisplay.textContent = "AI SCORE: " + aiScore;
 
     }
 
